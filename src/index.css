@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-layout-header {
+       padding: 0 10px !important;
+       height: auto !important;
+}
+.shadow-cm {
+       box-shadow: rgba(255, 255, 255, 0.619) 0px 0px 10px;
+}

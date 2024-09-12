@@ -8,10 +8,6 @@ const {Title} = Typography;
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
- 
-
-
-
 const ExpenseDisplay = () => {
   const [incomeAmount, setIncomeAmount] = useState(0)
   const [expenseAmount, setExpenseAmount] = useState(0)
@@ -21,18 +17,22 @@ const ExpenseDisplay = () => {
   useEffect(() => {
     if(income.length > 0){
       if(expense.length > 0){
-        const result = expense[0]?.amount + expense[1]?.amount
+        let result: number = 0
+        for (let i = 0 ; i < expense.length; i++) {
+          result += expense[i].amount;
+        }
         setExpenseAmount(result)
       }
     setIncomeAmount(income[0].amount)
     }
   }, [income, expense])
 
+
   const data = {
     labels: ['Expense', 'Income'],
     datasets: [
       {
-        label: '# of Votes',
+        label: 'Votes',
         data: [expenseAmount, incomeAmount],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
