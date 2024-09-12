@@ -21,7 +21,7 @@ const ExpenseDisplay = () => {
   useEffect(() => {
     if(income.length > 0){
       if(expense.length > 0){
-        const result = expense[0]?.amount + expense[1].amount
+        const result = expense[0]?.amount + expense[1]?.amount
         setExpenseAmount(result)
       }
     setIncomeAmount(income[0].amount)
