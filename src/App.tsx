@@ -1,13 +1,10 @@
-// import ExpenseContainer from "./components/expense-container";
-
-import Dashboard from "./dashboard/Dashboard"
+import RoutesController from "./routes/RoutesController"
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      {/* <ExpenseContainer /> */}
-      <Dashboard/>
-    </div>
+    <>
+      <RoutesController/>
+    </>
   )
 }
 

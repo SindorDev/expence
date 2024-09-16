@@ -1,7 +1,8 @@
+import { BsFileEarmarkPlusFill } from "react-icons/bs"; 
 import { TbFileAnalytics } from "react-icons/tb"; 
-import { RxDashboard } from "react-icons/rx"; 
-import { AiFillHome } from "react-icons/ai"; 
+import { RxDashboard } from "react-icons/rx";  
 import { Layout, Menu, } from 'antd';
+import { Link } from "react-router-dom";
 const { Sider } = Layout;
 
 
@@ -15,26 +16,27 @@ const Sidebar = ({collapsed}: any) => {
          items={[
           {
             key: '1',
-            icon: <AiFillHome size={20} />,
-            label: 'Home',
+            icon: <RxDashboard size={20} />,
+            label: <Link to="">Dashboard</Link>,
             style: {
               color: "#000",
             }
           },
           {
             key: '2',
-            icon: <RxDashboard size={20} />,
-            label: 'Dashboard',
+            icon: <TbFileAnalytics size={20} />,
+            label: <Link to="dashboard/transactions">Transactions</Link>,
             style: {
               color: "#000",
             }
           },
+
           {
             key: '3',
-            icon: <TbFileAnalytics size={20} />,
-            label: 'Analytics',
+            icon: <BsFileEarmarkPlusFill size={20} />,
+            label: <Link to="dashboard/new-transaction">New Transaction</Link>,
             style: {
-              color: "#000",
+              color: "#222",
             }
           },
          ]}

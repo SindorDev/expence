@@ -1,12 +1,13 @@
-import Sidebar from "../components/sidebar/Sidebar"
-import Headers from "../components/header/Headers"
-import ExpenseContainer from "../components/expense-container";
-import { Breadcrumb, Button, Layout } from "antd";
+import Sidebar from "../../components/sidebar/Sidebar"
+import Headers from "../../components/header/Headers"
+import { Breadcrumb, Layout } from "antd";
 import { useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 const { Content } = Layout;
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {pathname} = useLocation()
 
   return (
               <Layout>
@@ -16,25 +17,21 @@ const Dashboard = () => {
                   <Layout style={{ padding: '0 24px 24px' }}>
                     <div className="flex items-center justify-between">
                     <Breadcrumb style={{ margin: '16px 0', fontSize: "24px", fontWeight: "bold" }}>
-                      <Breadcrumb.Item>Manager</Breadcrumb.Item>
-                      <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+                      <Breadcrumb.Item>Admin</Breadcrumb.Item>
+                      <Breadcrumb.Item>{pathname === "/" ? "Dashboard" : pathname.split("/")[2]}</Breadcrumb.Item>
                     </Breadcrumb>
 
-                      <Button type="primary" onClick={() => setIsModalOpen(true)}>
-                         Create Transaction
-                      </Button>
                     </div>
                     <Content
                       style={{
                         padding: 24,
                         margin: 0,
-                        minHeight: 280,
+                        minHeight: "100vh",
                         background: "#fff",
                         borderRadius: "16px",
                       }}
                     >
-              <ExpenseContainer isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-                     
+                      <Outlet/>
                     </Content>
                   </Layout>
                 </Layout>

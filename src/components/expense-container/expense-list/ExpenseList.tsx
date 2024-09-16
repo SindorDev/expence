@@ -1,47 +1,74 @@
-import { useSelector } from "react-redux";
-import { Col, Row, Statistic, Typography } from "antd";
-import { ITransaction } from "../../../types";
+import { AiOutlineDelete } from "react-icons/ai"; 
+import { TbEdit } from "react-icons/tb"; 
+import React, { useState } from 'react';
+import { Button, Space, Table, Tag } from 'antd';
+import type { TableProps } from 'antd';
+import { useSelector } from 'react-redux';
 
-const { Title } = Typography;
+interface DataType {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  type: string[];
+}
 
-const ExpenseList = () => {
-  const {
-    transactionHistory: { income, expense },
-  } = useSelector((state: any) => state.transaction);
+const ExpenseList: React.FC = () => {
+  const [selected, setSelected] = useState<"income" | "expense">("income")
+
+  const {transactionHistory: { income, expense }} = useSelector((state: any) => state.transaction);
+
+  const columns: TableProps<DataType>['columns'] = [
+    
+
+    {
+      title: "Name",
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    
+    {
+      title: selected === "income" ? "Income" : "Expense",
+      dataIndex: 'expense_or_income',
+      key: selected === "income" ? "income" : "expense",
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+    },
+    {
+      title: 'Type',
+      key: 'type',
+      dataIndex: 'type',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: () => (
+        <Space size="middle">
+          <button className="rounded-full bg-gray-500 text-white p-2">
+            <TbEdit size={20} />
+          </button>
+          <button className="rounded-full bg-red-500 text-white p-2">
+            <AiOutlineDelete size={20} />
+          </button>
+        </Space>
+      ),
+    },
+  ];
+
   return (
-    <div className="flex gap-4">
-      <div className="flex flex-1 flex-col gap-1">
-        <Title level={3}>Income</Title>
-        {income.map((item: ITransaction, index: number) => (
-          <div
-            className="bg-green-200 border-[1px] p-2 border-green-600"
-            key={index}
-          >
-            <Row gutter={16}>
-              <Col span={12}>
-                <Statistic prefix="UZS" valueStyle={{ color: "green" }} title={item.name} value={item.amount} />
-              </Col>
-            </Row>
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-1 flex-col gap-1">
-        <Title level={3}>Expense</Title>
-        {expense.map((item: ITransaction, index: number) => (
-          <div
-            className="bg-red-200 border-[1px] p-2 border-red-600"
-            key={index}
-          >
-            <Row gutter={16}>
-              <Col span={12}>
-                <Statistic prefix="UZS" valueStyle={{ color: "green" }} title={item.name} value={item.amount} />
-              </Col>
-            </Row>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+    <>
+    
+    <Space style={{ marginBottom: 16 }}>
+    <Button onClick={() => setSelected("income")}>Income</Button>
+    <Button onClick={() => setSelected("expense")}>Expense</Button>
+  </Space>
+    <Table key={selected} columns={columns} dataSource={selected === "income" ? income : expense} />
+    </>
+  )
+}
 
 export default ExpenseList;

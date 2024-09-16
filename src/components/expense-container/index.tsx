@@ -1,6 +1,5 @@
 import ExpenseDisplay from "./expense-display/ExpenseDisplay"
 import ExpenseForm from "./expense-form/ExpenseForm"
-import ExpenseList from "./expense-list/ExpenseList"
 
 const index = ({isModalOpen, setIsModalOpen}: any) => {
 
@@ -11,7 +10,6 @@ const index = ({isModalOpen, setIsModalOpen}: any) => {
         <ExpenseForm isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
         <ExpenseDisplay/>
         </div>
-        <ExpenseList/>
     </div>
   )
 }

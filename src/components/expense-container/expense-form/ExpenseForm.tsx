@@ -1,6 +1,6 @@
 import React from "react";
 import type { FormProps } from "antd";
-import { Button, Form, Input, InputNumber, Modal, Select, Typography } from "antd";
+import { Button, Form, Input, InputNumber, Select, Typography } from "antd";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { createTransaction } from "../../../redux/slices/transactionHistory";
@@ -22,7 +22,6 @@ interface ExpenseFormProps {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 declare global {
   interface String {
     capitalize(): string;
@@ -33,7 +32,7 @@ String.prototype.capitalize = function () {
   return this[0]?.toUpperCase() + this?.slice(1);
 };
 
-const ExpenseForm: React.FC<ExpenseFormProps> = ({ isModalOpen, setIsModalOpen }) => {
+const ExpenseForm: React.FC<ExpenseFormProps> = () => {
   const [form] = useForm();
   const dispatch = useDispatch<AppDispatch>();
   const [actionType, setActionType] = React.useState<"income" | "expense">(
@@ -44,7 +43,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ isModalOpen, setIsModalOpen }
     const transaction = values as ITransaction;
     dispatch(createTransaction(transaction));
     form.resetFields();
-    setIsModalOpen(false);
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -52,14 +50,10 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ isModalOpen, setIsModalOpen }
   ) => {
     console.log("Failed:", errorInfo);
   };
-  const handleCancel = () => {
-    form.resetFields();
-    setIsModalOpen(false); 
-  };
 
   return (
-    <Modal title="Basic Modal" footer={false} open={isModalOpen} onCancel={handleCancel}>
-  
+    <div>
+      
   <Form
       form={form}
       name="basic"
@@ -122,7 +116,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ isModalOpen, setIsModalOpen }
         </Button>
       </Form.Item>
     </Form>
-  </Modal>
+    </div>
   );
 };
 
