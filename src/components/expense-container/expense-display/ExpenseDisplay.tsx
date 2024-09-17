@@ -47,6 +47,7 @@ const ExpenseDisplay = () => {
       },
     ],
   };
+
   return (
     <div className="flex items-center justify-between w-full flex-col">
       <div className="grid grid-cols-4 gap-5  w-full">
@@ -77,10 +78,18 @@ const ExpenseDisplay = () => {
           })
         }
       </div>
-      <div className="flex items-center justify-center w-[40%] flex-col mt-10">
+      {
+        totalAmount ? (
+          <div className="flex items-center justify-center w-[40%] flex-col mt-10">
       <Doughnut data={data} />
       <Title className="text-center mt-8" level={1}>{currencyFormatter.format(totalAmount, { code: 'UZS' }).replace("сўм", "UZS")}</Title>  
       </div>
+        ) : (
+          <div className="flex items-center justify-center w-[40%] flex-col mt-10">
+            <h1 className="text-black-600 text-lg font-bold">No transactions</h1>
+          </div>
+        )
+      }
      </div>
   )
 }

@@ -4,24 +4,13 @@ import { Button, Form, Input, InputNumber, Select, Typography } from "antd";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { createTransaction } from "../../../redux/slices/transactionHistory";
-import { ITransaction } from "../../../types";
+import { FieldType, ITransaction } from "../../../types";
 import { useForm } from "antd/es/form/Form";
 
 const { Option } = Select;
 const { Title } = Typography;
 
-type FieldType = {
-  name?: string;
-  amount?: number;
-  expense_or_income?: string;
-  type?: string;
-};
 
-// Define the props for ExpenseForm component
-interface ExpenseFormProps {
-  isModalOpen: boolean;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
 declare global {
   interface String {
     capitalize(): string;
@@ -32,7 +21,7 @@ String.prototype.capitalize = function () {
   return this[0]?.toUpperCase() + this?.slice(1);
 };
 
-const ExpenseForm: React.FC<ExpenseFormProps> = () => {
+const ExpenseForm = () => {
   const [form] = useForm();
   const dispatch = useDispatch<AppDispatch>();
   const [actionType, setActionType] = React.useState<"income" | "expense">(
@@ -40,16 +29,12 @@ const ExpenseForm: React.FC<ExpenseFormProps> = () => {
   );
   
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    const transaction = values as ITransaction;
+    const id = Math.floor(Math.random() * 1000).toString();
+    const transaction: ITransaction = {...values, id} ;
     dispatch(createTransaction(transaction));
     form.resetFields();
   };
 
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
-    errorInfo
-  ) => {
-    console.log("Failed:", errorInfo);
-  };
 
   return (
     <div>
@@ -57,10 +42,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = () => {
   <Form
       form={form}
       name="basic"
-      layout="vertical"
+      layout="horizontal"
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Title level={2}>Create an income or expense</Title>
@@ -88,6 +72,30 @@ const ExpenseForm: React.FC<ExpenseFormProps> = () => {
       </Form.Item>
 
       <Form.Item<FieldType>
+        label={`${actionType.capitalize()} date`}
+        name="date"
+        rules={[
+          { required: true, message: "Please input your expense amount!" },
+        ]}
+      >
+        <Select>
+          {Array.from({ length: (new Date().getFullYear() - 2019) * 365 }, (_, index) => {
+            const date = new Date(2020, 0, 1);
+            date.setDate(date.getDate() + index);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const value = date.toISOString().slice(0, 10);
+            return (
+              <Option key={value} value={value}>
+                {`${year}-${month}-${day}`}
+              </Option>
+            );
+          })}
+        </Select>
+      </Form.Item>
+
+      <Form.Item<FieldType>
         label={`${actionType.capitalize()} amount`}
         name="amount"
         rules={[
@@ -102,16 +110,49 @@ const ExpenseForm: React.FC<ExpenseFormProps> = () => {
         name="type"
         rules={[{ required: true, message: "Please input your expense type!" }]}
       >
-        <Select placeholder="Select expense type">
-          <Option value="food">Food</Option>
-          <Option value="travel">Travel</Option>
-          <Option value="entertainment">Entertainment</Option>
+        <Select placeholder={`Select ${actionType} type`}>
+          {actionType === 'expense' ? (
+            <>
+              <Option value="food">Food</Option>
+              <Option value="travel">Travel</Option>
+              <Option value="entertainment">Entertainment</Option>
+              <Option value="utilities">Utilities</Option>
+              <Option value="rent">Rent</Option>
+              <Option value="healthcare">Healthcare</Option>
+              <Option value="education">Education</Option>
+              <Option value="shopping">Shopping</Option>
+              
+            </>
+          ) : (
+            <>
+              <Option value="salary">Salary</Option>
+              <Option value="bonus">Bonus</Option>
+              <Option value="investment">Investment</Option>
+              <Option value="freelance">Freelance</Option>
+              <Option value="gift">Gift</Option>
+              <Option value="rental">Rental Income</Option>
+              <Option value="refund">Refund</Option>
+              
+            </>
+          )}
           <Option value="other">Other</Option>
         </Select>
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 16, span: 24 }}>
-        <Button type="primary" htmlType="submit">
+
+      <Form.Item<FieldType>
+        label={`${actionType.capitalize()} payment method`}
+        name="payment_method"
+        rules={[{ required: true, message: "Please input your expense payment method!" }]}
+      >
+        <Select placeholder={`Select ${actionType} payment method`}>
+          <Option value="cash">Cash</Option>
+          <Option value="card">Card</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item wrapperCol={{span: 24 }}>
+        <Button type="primary" htmlType="submit" className="w-full !py-6">
           Create an {actionType}
         </Button>
       </Form.Item>

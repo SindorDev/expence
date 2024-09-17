@@ -1,9 +1,12 @@
 import { AiOutlineDelete } from "react-icons/ai"; 
 import { TbEdit } from "react-icons/tb"; 
 import React, { useState } from 'react';
-import { Button, Space, Table, Tag } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
 import type { TableProps } from 'antd';
-import { useSelector } from 'react-redux';
+import { SearchOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { ITransaction } from "../../../types";
+import { deleteTransaction } from "../../../redux/slices/transactionHistory";
 
 interface DataType {
   key: string;
@@ -15,10 +18,24 @@ interface DataType {
 
 const ExpenseList: React.FC = () => {
   const [selected, setSelected] = useState<"income" | "expense">("income")
-
+  const [searchValue, setSearchValue] = useState<string>("")
+  const dispatch = useDispatch();
   const {transactionHistory: { income, expense }} = useSelector((state: any) => state.transaction);
 
-  const columns: TableProps<DataType>['columns'] = [
+  const handleDelete = (data: ITransaction) => {
+    dispatch(deleteTransaction(data))
+  }
+
+  const filteredData = (data: ITransaction[]) => {
+    return data.filter((item) => item.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+  }
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value.toLocaleLowerCase())
+  }
+
+
+  const columns: TableProps<ITransaction>['columns'] = [
     
 
     {
@@ -46,27 +63,31 @@ const ExpenseList: React.FC = () => {
     {
       title: 'Action',
       key: 'action',
-      render: () => (
+      render: (data) => (
         <Space size="middle">
           <button className="rounded-full bg-gray-500 text-white p-2">
             <TbEdit size={20} />
           </button>
-          <button className="rounded-full bg-red-500 text-white p-2">
+          <button onClick={() => {
+            handleDelete(data)
+          }} className="rounded-full bg-red-500 text-white p-2">
             <AiOutlineDelete size={20} />
           </button>
         </Space>
       ),
     },
   ];
-
+  
   return (
     <>
-    
-    <Space style={{ marginBottom: 16 }}>
+    <Space style={{ marginBottom: 16 }} className="flex items-center justify-between">
+     <Input onChange={(e) => handleSearch(e.target.value)} placeholder="Search by name" prefix={<SearchOutlined />} className="w-[140%] justify-between items-center flex-row-reverse"/>
+     <div className="flex items-center gap-5">
     <Button onClick={() => setSelected("income")}>Income</Button>
     <Button onClick={() => setSelected("expense")}>Expense</Button>
+     </div>
   </Space>
-    <Table key={selected} columns={columns} dataSource={selected === "income" ? income : expense} />
+    <Table key={selected} columns={columns} dataSource={filteredData(selected === "income" ? income : expense)} />
     </>
   )
 }
