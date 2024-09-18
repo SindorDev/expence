@@ -30,7 +30,7 @@ const ExpenseForm = () => {
   
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     const id = Math.floor(Math.random() * 1000).toString();
-    const transaction: ITransaction = {...values, id} ;
+    const transaction = {...values, id} as ITransaction;
     dispatch(createTransaction(transaction));
     form.resetFields();
   };

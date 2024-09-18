@@ -12,7 +12,6 @@ export interface IExpenseType {
     type: string;
     createdAt: string;
     amount: number;
-    payment_method: string;
 }
 
 export type FieldType = {
@@ -22,4 +21,5 @@ export type FieldType = {
   expense_or_income?: string;
   type?: string;
   date?: string;
+  payment_method?: string;
 };

@@ -12,7 +12,7 @@ const Loading = () => {
      )
 }
 
-const SuspenseElement = ({children}) => {
+const SuspenseElement = ({children}: {children: React.ReactNode}) => {
      return ( <Suspense fallback={<Loading/>}> {children}  </Suspense>)
 }
 
