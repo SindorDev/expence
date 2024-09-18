@@ -8,13 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ITransaction } from "../../../types";
 import { deleteTransaction } from "../../../redux/slices/transactionHistory";
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  type: string[];
-}
 
 const ExpenseList: React.FC = () => {
   const [selected, setSelected] = useState<"income" | "expense">("income")
